@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -19,7 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     public static final int LOCATION_REQUEST_CODE = 1;
@@ -34,6 +35,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        if (apiCliente == null) {
+            apiCliente = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
     }
 
 
@@ -103,8 +112,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     @Override
     protected void onStart() {
-        apiCliente.connect();
         super.onStart();
+        apiCliente.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        apiCliente.disconnect();
     }
 
     @Override
@@ -129,6 +144,11 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     @Override
     public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }
