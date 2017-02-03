@@ -29,7 +29,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private GoogleApiClient apiCliente;
     private Location objetoLocalizacion;
     private LatLng centroCirculo = new LatLng(42.238061, -8.716973);
-
+    private final LatLng marcador = new LatLng(42.237803, -8.716910);
+    Location marcaUbicacion =new Location("premio");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +39,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        marcaUbicacion.setLatitude(marcador.latitude);
+        marcaUbicacion.setLongitude(marcador.longitude);
         if (apiCliente == null) {
             apiCliente = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -82,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         // Marcadores
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(42.237803, -8.716910)));
 
         CircleOptions circulo = new CircleOptions()
                 .center(centroCirculo)
@@ -145,6 +147,10 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             return;
         }
         objetoLocalizacion = LocationServices.FusedLocationApi.getLastLocation(apiCliente);
+
+        float distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
+        Toast.makeText(this, "Distancia: "+((int)(distanciaPremio))+" metros", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
