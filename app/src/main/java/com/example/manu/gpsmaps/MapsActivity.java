@@ -1,6 +1,7 @@
 package com.example.manu.gpsmaps;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -26,6 +28,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     public static final int LOCATION_REQUEST_CODE = 1;
     private GoogleApiClient apiCliente;
     private Location objetoLocalizacion;
+    private LatLng centroCirculo = new LatLng(42.238061, -8.716973);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,13 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         // Marcadores
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
 
+        CircleOptions circulo = new CircleOptions()
+                .center(centroCirculo)
+                .radius(100)
+                .strokeColor(Color.parseColor("6FB1E4"))
+                .strokeWidth(4)
+                .fillColor(Color.argb(32, 33, 150, 243));
+        mMap.addCircle(circulo).setVisible(true);
 
     }
 
