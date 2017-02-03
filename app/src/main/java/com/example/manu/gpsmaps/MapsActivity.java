@@ -87,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         CircleOptions circulo = new CircleOptions()
                 .center(centroCirculo)
                 .radius(100)
-                .strokeColor(Color.parseColor("6FB1E4"))
+                .strokeColor(Color.parseColor("#6FB1E4"))
                 .strokeWidth(4)
                 .fillColor(Color.argb(32, 33, 150, 243));
         mMap.addCircle(circulo).setVisible(true);
