@@ -1,8 +1,12 @@
 package com.example.manu.gpsmaps;
 
+import android.*;
+import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +16,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -22,7 +29,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     public static final int LOCATION_REQUEST_CODE = 1;
@@ -44,11 +51,13 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         marcaUbicacion.setLatitude(marcador.latitude);
         marcaUbicacion.setLongitude(marcador.longitude);
         if (apiCliente == null) {
+            // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
+            // See https://g.co/AppIndexing/AndroidStudio for more information.
             apiCliente = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
-                    .build();
+                    .addApi(AppIndex.API).build();
         }
         instruccionesOb = findViewById(R.id.instrucciones);
 
@@ -70,18 +79,18 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mMap = googleMap;
         mMap.setOnMapClickListener(this);
         // Controles UI
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // Mostrar diálogo explicativo
             } else {
                 // Solicitar permiso
                 ActivityCompat.requestPermissions(
                         this,
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         LOCATION_REQUEST_CODE);
             }
         }
@@ -107,9 +116,9 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         if (requestCode == LOCATION_REQUEST_CODE) {
             // ¿Permisos asignados?
             if (permissions.length > 0 &&
-                    permissions[0].equals(android.Manifest.permission.ACCESS_FINE_LOCATION) &&
+                    permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -131,17 +140,22 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     protected void onStart() {
         super.onStart();
         apiCliente.connect();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.start(apiCliente, getIndexApiAction());
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(apiCliente, getIndexApiAction());
         apiCliente.disconnect();
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -151,6 +165,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         objetoLocalizacion = LocationServices.FusedLocationApi.getLastLocation(apiCliente);
 
         distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
@@ -175,8 +190,32 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     public void ocultarFragment (View view){
         instruccionesOb.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Maps Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        Intent intent = new Intent(getBaseContext(), ScannerActivity.class);
+        int code = 4545; // Esto puede ser cualquier código.
+        startActivityForResult(intent, code);
     }
 }
 
