@@ -77,7 +77,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMapClickListener(this);
         // Controles UI
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -94,12 +93,9 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                         LOCATION_REQUEST_CODE);
             }
         }
-
+        mMap.setOnMapClickListener(this);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        // Marcadores
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(42.237803, -8.716910)));
-
+        mMap.setOnMapLongClickListener(this);
         CircleOptions circulo = new CircleOptions()
                 .center(centroCirculo)
                 .radius(100)
