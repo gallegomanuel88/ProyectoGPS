@@ -9,12 +9,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,6 +31,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private LatLng centroCirculo = new LatLng(42.238061, -8.716973);
     private final LatLng marcador = new LatLng(42.237803, -8.716910);
     Location marcaUbicacion =new Location("premio");
+    private float distanciaPremio;
+    View instruccionesOb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,10 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                     .addApi(LocationServices.API)
                     .build();
         }
+        instruccionesOb = findViewById(R.id.instrucciones);
+
     }
+
 
 
     /**
@@ -148,7 +153,10 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         }
         objetoLocalizacion = LocationServices.FusedLocationApi.getLastLocation(apiCliente);
 
-        float distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
+        distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
+        if (distanciaPremio < 20){
+            mMap.addMarker(new MarkerOptions().position(marcador)).setVisible(true);
+        }
         Toast.makeText(this, "Distancia: "+((int)(distanciaPremio))+" metros", Toast.LENGTH_LONG).show();
 
     }
@@ -166,6 +174,9 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+    public void ocultarFragment (View view){
+        instruccionesOb.setVisibility(View.INVISIBLE);
     }
 }
 
