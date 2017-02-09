@@ -1,5 +1,6 @@
 package com.example.manu.gpsmaps;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,9 +38,11 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     @Override
     public void handleResult(Result rawResult) {
-
         Log.i("QRCode", rawResult.getText());
-
+        Intent dataQR = new Intent();
+        dataQR.putExtra("valorQR", rawResult.getText());
+        setResult(RESULT_OK, dataQR);
         mScannerView.resumeCameraPreview(this);
+        finish();
     }
 }

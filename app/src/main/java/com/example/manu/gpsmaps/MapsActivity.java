@@ -32,6 +32,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
+    private String qr1 = "QRpunto1";
+    private String qr2 = "QRpunto2";
+    private String qr3 = "QRpunto3";
     public static final int LOCATION_REQUEST_CODE = 1;
     private GoogleApiClient apiCliente;
     private Location objetoLocalizacion;
@@ -212,6 +215,27 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         Intent intent = new Intent(getBaseContext(), ScannerActivity.class);
         int code = 4545; // Esto puede ser cualquier código.
         startActivityForResult(intent, code);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 4545){
+            if (resultCode == RESULT_OK){
+                String valorQR = data.getStringExtra("valorQR");
+                elegirQr(valorQR);
+            }
+        }
+    }
+    public void elegirQr (String qrComparar) {
+        if (qrComparar.equals(qr1)) {
+            Toast.makeText(this, "Bien has encontrado la primera pista!!!", Toast.LENGTH_LONG).show();
+        } else if (qrComparar.equals(qr2)) {
+            Toast.makeText(this, "Bien has encontrado la segunda pista!!!", Toast.LENGTH_LONG).show();
+        }
+        else if (qrComparar.equals(qr3)){
+            Toast.makeText(this,"Bien has encontrado todas las pistas!!!",Toast.LENGTH_LONG).show();
+        }
     }
 }
 
