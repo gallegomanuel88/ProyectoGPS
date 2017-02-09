@@ -1,6 +1,5 @@
 package com.example.manu.gpsmaps;
 
-import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +24,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -38,7 +38,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     public static final int LOCATION_REQUEST_CODE = 1;
     private GoogleApiClient apiCliente;
     private Location objetoLocalizacion;
-    private LatLng centroCirculo = new LatLng(42.238061, -8.716973);
+    CircleOptions statsCirculo;
+    Circle circulo;
     private final LatLng marcador = new LatLng(42.237803, -8.716910);
     Location marcaUbicacion =new Location("premio");
     private float distanciaPremio;
@@ -66,17 +67,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     }
 
-
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -99,14 +89,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mMap.setOnMapClickListener(this);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setOnMapLongClickListener(this);
-        CircleOptions circulo = new CircleOptions()
-                .center(centroCirculo)
-                .radius(100)
-                .strokeColor(Color.parseColor("#6FB1E4"))
-                .strokeWidth(4)
-                .fillColor(Color.argb(32, 33, 150, 243));
-        mMap.addCircle(circulo).setVisible(true);
-
+        crearCirculo(new LatLng(42.238061, -8.716973));
     }
 
     @Override
@@ -131,7 +114,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             } else {
                 Toast.makeText(this, "Error de permisos", Toast.LENGTH_LONG).show();
             }
-
         }
     }
 
@@ -147,7 +129,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     @Override
     protected void onStop() {
         super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
-// See https://g.co/AppIndexing/AndroidStudio for more information.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(apiCliente, getIndexApiAction());
         apiCliente.disconnect();
     }
@@ -227,14 +209,40 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             }
         }
     }
+
+    /**
+     * Cambia las zonas circulares en el mapa.
+     * @param puntoCirculo recibe una latitud y longitud en este orden.
+     */
+    public void crearCirculo(LatLng puntoCirculo){
+        statsCirculo = new CircleOptions()
+                .center(puntoCirculo)
+                .radius(100)
+                .strokeColor(Color.parseColor("#6FB1E4"))
+                .strokeWidth(4)
+                .fillColor(Color.argb(32, 33, 150, 243));
+        circulo = mMap.addCircle(statsCirculo);
+        circulo.setVisible(true);
+    }
+    /**
+     * Recibe un codigo QR y lo compara para ver si es uno de los QR que estan almacenados en variables.
+     * @param qrComparar recibe un String que es un codigo QR
+     */
     public void elegirQr (String qrComparar) {
         if (qrComparar.equals(qr1)) {
             Toast.makeText(this, "Bien has encontrado la primera pista!!!", Toast.LENGTH_LONG).show();
+            circulo.remove();
+            crearCirculo(new LatLng(42.236776, -8.712169));
         } else if (qrComparar.equals(qr2)) {
             Toast.makeText(this, "Bien has encontrado la segunda pista!!!", Toast.LENGTH_LONG).show();
+            circulo.remove();
+            crearCirculo(new LatLng(42.236815, -8.714780));
         }
         else if (qrComparar.equals(qr3)){
             Toast.makeText(this,"Bien has encontrado todas las pistas!!!",Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this,"Codigo QR incorrecto",Toast.LENGTH_LONG).show();
         }
     }
 }
