@@ -153,7 +153,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         objetoLocalizacion = LocationServices.FusedLocationApi.getLastLocation(apiCliente);
 
         distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
-        if (distanciaPremio < 20000){
+        if (distanciaPremio < 20){
             marca = mMap.addMarker(new MarkerOptions().position(marcador));
             marca.setVisible(true);
         }

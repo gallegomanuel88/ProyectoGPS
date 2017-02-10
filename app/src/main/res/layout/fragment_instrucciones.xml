@@ -8,10 +8,10 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="30dp"
         android:textAlignment="center"
         android:text="@string/instruccionesCabecera"
-        android:textSize="15dp"/>
+        android:textSize="20dp"/>
 
     <Button
         android:text="Aceptar"
@@ -21,4 +21,14 @@
         android:onClick="ocultarFragment"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="@string/instruccionesCuerpo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="67dp"
+        android:textSize="17dp"/>
 </RelativeLayout>

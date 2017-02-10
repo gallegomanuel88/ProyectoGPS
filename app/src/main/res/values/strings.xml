@@ -4,5 +4,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="instruccionesCabecera"><b>Instrucciones de uso:</b></string>
-    <string name="instruccionesCuerpo">1º Tienes que encontrar las ubicaciones ocultas.\n2º Las ubicaciones se encuentran dentro de las zonas circulares del mapa.\n3º Toca el mapa para ver la distancia que estas de la ubicacion.\n4º Cuando estes a menos de 20 metros se mostrara la ubicación.\n5º En el lugar de la ubicación encontrarás un codigo QR, leelo con la camara dejando pulsada la pantalla</string>
+    <string name="instruccionesCuerpo">1º Tienes que encontrar las ubicaciones ocultas.\n2º Las ubicaciones se encuentran dentro de las zonas circulares del mapa.\n3º Toca el mapa para ver la distancia que estas de la ubicacion.\n4º Cuando estes a menos de 20 metros se mostrara la ubicación.\n5º En el lugar de la ubicación encontrarás un codigo QR, leelo con la camara dejando pulsada la pantalla.</string>
 </resources>
