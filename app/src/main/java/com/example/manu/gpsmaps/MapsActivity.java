@@ -93,6 +93,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setOnMapLongClickListener(this);
         crearCirculo(new LatLng(42.238061, -8.716973));
+        marca = mMap.addMarker(new MarkerOptions().position(marcador));
+        marca.setVisible(false);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
         if (distanciaPremio < 20){
-            marca = mMap.addMarker(new MarkerOptions().position(marcador));
+
             marca.setVisible(true);
         }
         Toast.makeText(this, "Distancia: "+((int)(distanciaPremio))+" metros", Toast.LENGTH_LONG).show();
