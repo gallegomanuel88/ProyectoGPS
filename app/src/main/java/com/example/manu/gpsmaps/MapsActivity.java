@@ -27,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleApiClient.OnConnectionFailedListener {
@@ -38,12 +39,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     public static final int LOCATION_REQUEST_CODE = 1;
     private GoogleApiClient apiCliente;
     private Location objetoLocalizacion;
-    CircleOptions statsCirculo;
-    Circle circulo;
-    private final LatLng marcador = new LatLng(42.237803, -8.716910);
+    private CircleOptions statsCirculo;
+    private Circle circulo;
+    private LatLng marcador;
+    private Marker marca;
     Location marcaUbicacion =new Location("premio");
     private float distanciaPremio;
     View instruccionesOb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        marcador = new LatLng(42.237803, -8.716910);
         marcaUbicacion.setLatitude(marcador.latitude);
         marcaUbicacion.setLongitude(marcador.longitude);
         if (apiCliente == null) {
@@ -64,7 +68,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                     .addApi(AppIndex.API).build();
         }
         instruccionesOb = findViewById(R.id.instrucciones);
-
     }
 
     @Override
@@ -150,11 +153,11 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         objetoLocalizacion = LocationServices.FusedLocationApi.getLastLocation(apiCliente);
 
         distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
-        if (distanciaPremio < 20){
-            mMap.addMarker(new MarkerOptions().position(marcador)).setVisible(true);
+        if (distanciaPremio < 20000){
+            marca = mMap.addMarker(new MarkerOptions().position(marcador));
+            marca.setVisible(true);
         }
         Toast.makeText(this, "Distancia: "+((int)(distanciaPremio))+" metros", Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -225,21 +228,30 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         circulo.setVisible(true);
     }
     /**
-     * Recibe un codigo QR y lo compara para ver si es uno de los QR que estan almacenados en variables.
+     * Recibe un codigo QR y lo compara para ver si es uno de los QR que estan almacenados en variables. Tambien borra las marcas y circulos descubierta.
      * @param qrComparar recibe un String que es un codigo QR
      */
     public void elegirQr (String qrComparar) {
         if (qrComparar.equals(qr1)) {
             Toast.makeText(this, "Bien has encontrado la primera pista!!!", Toast.LENGTH_LONG).show();
             circulo.remove();
+            marca.remove();
+            marcador = new LatLng(42.236483, -8.711229);
+            marcaUbicacion.setLatitude(marcador.latitude);
+            marcaUbicacion.setLongitude(marcador.longitude);
             crearCirculo(new LatLng(42.236776, -8.712169));
         } else if (qrComparar.equals(qr2)) {
             Toast.makeText(this, "Bien has encontrado la segunda pista!!!", Toast.LENGTH_LONG).show();
             circulo.remove();
+            marca.remove();
+            marcador = new LatLng(42.236303, -8.714789);
+            marcaUbicacion.setLatitude(marcador.latitude);
+            marcaUbicacion.setLongitude(marcador.longitude);
             crearCirculo(new LatLng(42.236815, -8.714780));
         }
         else if (qrComparar.equals(qr3)){
             Toast.makeText(this,"Bien has encontrado todas las pistas!!!",Toast.LENGTH_LONG).show();
+            circulo.remove();
         }
         else {
             Toast.makeText(this,"Codigo QR incorrecto",Toast.LENGTH_LONG).show();

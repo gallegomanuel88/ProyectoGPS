@@ -19,5 +19,5 @@
         android:endColor="#22000000"
         android:startColor="#22000000"
         android:angle="270" />
-    <solid android:color="@android:color/background_light"/>
+    <solid android:color="@android:color/darker_gray"/>
 </shape>
