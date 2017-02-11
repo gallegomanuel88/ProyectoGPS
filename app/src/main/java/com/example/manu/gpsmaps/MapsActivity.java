@@ -55,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        marcador = new LatLng(42.237803, -8.716910);
+        marcador = new LatLng(42.237804, -8.716776);
         marcaUbicacion.setLatitude(marcador.latitude);
         marcaUbicacion.setLongitude(marcador.longitude);
         if (apiCliente == null) {
@@ -155,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         objetoLocalizacion = LocationServices.FusedLocationApi.getLastLocation(apiCliente);
 
         distanciaPremio =marcaUbicacion.distanceTo(objetoLocalizacion);
-        if (distanciaPremio < 20){
+        if (((int)(distanciaPremio)) < 25){
 
             marca.setVisible(true);
         }
@@ -238,7 +238,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             Toast.makeText(this, "Bien has encontrado la primera pista!!!", Toast.LENGTH_LONG).show();
             circulo.remove();
             marca.remove();
-            marcador = new LatLng(42.236483, -8.711229);
+            marcador = new LatLng(42.236682, -8.711511);
             marcaUbicacion.setLatitude(marcador.latitude);
             marcaUbicacion.setLongitude(marcador.longitude);
             crearCirculo(new LatLng(42.236776, -8.712169));
@@ -246,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             Toast.makeText(this, "Bien has encontrado la segunda pista!!!", Toast.LENGTH_LONG).show();
             circulo.remove();
             marca.remove();
-            marcador = new LatLng(42.236303, -8.714789);
+            marcador = new LatLng(42.236151, -8.714749);
             marcaUbicacion.setLatitude(marcador.latitude);
             marcaUbicacion.setLongitude(marcador.longitude);
             crearCirculo(new LatLng(42.236815, -8.714780));
